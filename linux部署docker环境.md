@@ -3,17 +3,26 @@
 ## Docker
 
 ```sh
-# 下载安装包 & 解压
-cd /usr/local/bin
-curl -O https://download.docker.com/linux/static/stable/x86_64/docker-27.3.1.tgz
-tar xvf docker-27.3.1.tgz
-mv ./docker ./docker.d
-mv ./docker.d/* ./
-rm -rf ./docker-27.3.1.tgz
-rm -rf ./docker.d
+# 下载二进制包
+wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.4.0.tgz
+
+# 解压
+tar xvf /usr/local/bin/docker-27.4.0.tgz
+
+# 重命名
+mv /usr/local/bin/docker /usr/local/bin/docker.d
+
+# 移动
+mv /usr/local/bin/docker.d/* /usr/local/bin/
+
+# 删除
+rm -rf /usr/local/bin/docker-27.4.0.tgz
+rm -rf /usr/local/bin/docker.d
+
+# 创建docker配置文件目录
+mkdir -p /etc/docker
 
 # 创建docker配置文件
-mkdir -p /etc/docker
 > /etc/docker/daemon.json
 
 # 创建systemd配置文件
@@ -39,7 +48,7 @@ Type=notify
 # Environment="HTTP_PROXY=http://your.proxy.server:port"
 # Environment="HTTPS_PROXY=https://your.proxy.server:port"
 # Environment="NO_PROXY=localhost,127.0.0.1,::1,192.168.1.0/24"
-ExecStart=dockerd --data-root /data/docker
+ExecStart=/usr/local/bin/dockerd --data-root /data/docker
 
 [Install]
 WantedBy=multi-user.target
@@ -298,5 +307,29 @@ docker run -d \
 -v /data/nginx/conf.d:/etc/nginx/conf.d \
 -v /data/nginx/log:/var/log/nginx \
 nginx:1.27.2
+```
+
+## OceanBase
+
+```sh
+# 创建数据挂载目录
+mkdir -p /data/oceanbase/data
+
+# 创建配置挂载目录
+mkdir -p /data/oceanbase/cluster
+
+# 创建容器
+docker run -d \
+--name=oceanbase \
+-p 2881:2881 \
+--restart=always \
+--ulimit nofile=20000:20000 \
+--ulimit nproc=120000:120000 \
+-e TZ=Asia/Shanghai \
+-e MODE=NORMAL \
+-e EXIT_WHILE_ERROR=false \
+-v /data/oceanbase/data:/root/ob \
+-v /data/oceanbase/cluster:/root/.obd/cluster \
+quay.io/oceanbase/oceanbase-ce
 ```
 
