@@ -27,6 +27,8 @@ wsl --import <自定义名称> "<执行目录>" "<导入文件路径及名称>.t
 [wsl2]
 # mirrored表示镜像网络, 虚拟机与主机共用IP
 networkingMode=mirrored
+# 设置wsl的内存大小, 默认为主机内存的一半
+memory=16G
 
 [experimental]
 # networkingMode=mirrored时此配置才有效. true表示虚拟机和主机之前可以互相通过IP地址访问, 否则只能通过localhost,127.0.0.1访问
