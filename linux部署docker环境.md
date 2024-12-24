@@ -4,20 +4,13 @@
 
 ```sh
 # 下载二进制包
-wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.4.0.tgz
+wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz
 
 # 解压
-tar xvf /usr/local/bin/docker-27.4.0.tgz
-
-# 重命名
-mv /usr/local/bin/docker /usr/local/bin/docker.d
-
-# 移动
-mv /usr/local/bin/docker.d/* /usr/local/bin/
+tar xvf /usr/local/bin/docker-27.4.1.tgz --strip-components=1 -C /usr/local/bin/
 
 # 删除
-rm -rf /usr/local/bin/docker-27.4.0.tgz
-rm -rf /usr/local/bin/docker.d
+rm -rf /usr/local/bin/docker-27.4.1.tgz
 
 # 创建docker配置文件目录
 mkdir -p /etc/docker
