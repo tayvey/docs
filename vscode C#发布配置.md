@@ -11,6 +11,7 @@
                 "cwd": "${workspaceFolder}/src/webtest"
             },
             "command": "rm -rf ./bin/Release/*",
+            // "command": "Remove-Item -Path .\\bin\\Release\\* -Recurse -Force",
             "problemMatcher": "$msCompile"
         },
         {
@@ -21,6 +22,7 @@
                 "cwd": "${workspaceFolder}/src/webtest"
             },
             "command": "rm -rf ./bin/publish/*",
+            // "command": "Remove-Item -Path .\\bin\\publish\\* -Recurse -Force",
             "problemMatcher": "$msCompile"
         },
         {
