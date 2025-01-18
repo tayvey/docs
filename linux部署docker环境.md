@@ -4,13 +4,13 @@
 
 ```sh
 # 下载二进制包
-wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz
+wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.5.0.tgz
 
 # 解压
-tar xvf /usr/local/bin/docker-27.4.1.tgz --strip-components=1 -C /usr/local/bin/
+tar xvf /usr/local/bin/docker-27.5.0.tgz --strip-components=1 -C /usr/local/bin/
 
 # 删除
-rm -rf /usr/local/bin/docker-27.4.1.tgz
+rm -rf /usr/local/bin/docker-27.5.0.tgz
 
 # 创建docker配置文件目录
 mkdir -p /etc/docker
@@ -325,4 +325,3 @@ docker run -d \
 -v /data/oceanbase/cluster:/root/.obd/cluster \
 quay.io/oceanbase/oceanbase-ce
 ```
-
