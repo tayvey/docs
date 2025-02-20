@@ -74,6 +74,20 @@ https://gitlab.archlinux.org/uploads/-/system/group/avatar/23/iconfinder_archlin
 passwd
 ```
 
+配置重置x11链接
+<br/>有时x11可能会被systemd误清理, 导致无法在windows调起linux GUI窗口, 增加此配置手动重置
+
+```sh
+# 编辑`/etc/bash.bashrc`
+# 增加一行`alias x11="sudo rm -r /tmp/.X11-unix && sudo ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix"`
+# 必要时直接执行`x11`重置
+# ctrl + s 保存, ctrl + x 退出
+nano /etc/bash.bashrc
+
+# 应用更改
+source /etc/bash.bashrc
+```
+
 [可选] 创建常用用户以避免直接使用root用户
 
 ```sh
@@ -118,16 +132,6 @@ sudo nano /etc/pacman.d/mirrorlist
 
 # 重新同步软件包仓库
 sudo pacman -Syyu
-```
-
-使用wslg. 可以在windows中打开linux软件的GUI窗口
-
-```sh
-# wsl arch
-
-# 替换`/tmp/.X11-unix`文件
-sudo rm -rf /tmp/.X11-unix
-sudo ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
 ```
 
 `arch.exe`常用命令
