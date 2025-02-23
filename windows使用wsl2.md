@@ -51,7 +51,7 @@ hostAddressLoopback=true
 ## 安装arch发行版
 
 安装文件下载地址<br/>
-[github/yuk7/ArchWSL](#https://github.com/yuk7/ArchWSL/releases)
+https://github.com/yuk7/ArchWSL/releases
 
 ```txt
 下载`Arch.zip`压缩包并解压, 将会得到`Arch.exe`文件和`rootfs.tar.gz`文件
@@ -72,20 +72,6 @@ https://gitlab.archlinux.org/uploads/-/system/group/avatar/23/iconfinder_archlin
 # wsl arch
 
 passwd
-```
-
-配置重置x11链接
-<br/>有时x11可能会被systemd误清理, 导致无法在windows调起linux GUI窗口, 增加此配置手动重置
-
-```sh
-# 编辑`/etc/bash.bashrc`
-# 增加一行`alias x11="sudo rm -r /tmp/.X11-unix && sudo ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix"`
-# 必要时直接执行`x11`重置
-# ctrl + s 保存, ctrl + x 退出
-nano /etc/bash.bashrc
-
-# 应用更改
-source /etc/bash.bashrc
 ```
 
 [可选] 创建常用用户以避免直接使用root用户
@@ -110,7 +96,7 @@ passwd <用户名>
 .\Arch.exe config --default-user <用户名>
 ```
 
-[可选. 取决于是否需要使用 pacman ] 初始化密钥环
+[可选] 初始化pacman密钥环 (取决于是否需要使用pacman)
 
 ```sh
 # wsl arch

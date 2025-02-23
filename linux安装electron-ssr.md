@@ -1,7 +1,8 @@
 # linux安装electron-ssr
 
 运行文件下载路径<br/>
-[123云盘](#https://www.123684.com/s/Al49jv-MB2Zv?提取码:dURa)
+https://www.123684.com/s/Al49jv-MB2Zv<br/>
+提取码:dURa
 
 ## 授权
 
@@ -15,4 +16,11 @@ sudo chmod +x electron-ssr-0.3.0-alpha.6.AppImage
 
 ```sh
 sudo pacman -S fuse nss gdk-pixbuf2 gtk3 alsa-lib python
+```
+
+## x11问题处理
+
+```sh
+rm -r /tmp/.X11-unix
+ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
 ```
