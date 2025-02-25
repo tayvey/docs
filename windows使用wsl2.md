@@ -63,7 +63,7 @@ https://github.com/yuk7/ArchWSL/releases
 运行`Arch.exe`创建wsl实例以及虚拟磁盘文件
 ```
 
-[可选] 修改windows终端中的配置图标
+[可选] 修改windows终端中的配置图标<br/>
 https://gitlab.archlinux.org/uploads/-/system/group/avatar/23/iconfinder_archlinux_386451.png?width=48
 
 设置root用户密码
