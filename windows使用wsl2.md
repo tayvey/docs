@@ -120,6 +120,18 @@ sudo nano /etc/pacman.d/mirrorlist
 sudo pacman -Syyu
 ```
 
+解决图形化程序可能会无法使用的问题
+
+```sh
+# wsl arch
+
+# 创建文件 /etc/tmpfiles.d/wslg.conf
+> /etc/tmpfiles.d/wslg.conf
+
+# 写入内容
+echo "L+ /tmp/.X11-unix - - - - /mnt/wslg/.X11-unix" >> /etc/tmpfiles.d/wslg.conf
+```
+
 `arch.exe`常用命令
 
 ```powershell

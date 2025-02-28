@@ -17,10 +17,3 @@ sudo chmod +x electron-ssr-0.3.0-alpha.6.AppImage
 ```sh
 sudo pacman -S fuse nss gdk-pixbuf2 gtk3 alsa-lib python
 ```
-
-## x11问题处理
-
-```sh
-rm -r /tmp/.X11-unix
-ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
-```
