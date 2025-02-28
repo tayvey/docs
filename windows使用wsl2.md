@@ -74,6 +74,20 @@ https://gitlab.archlinux.org/uploads/-/system/group/avatar/23/iconfinder_archlin
 passwd
 ```
 
+解决图形化程序可能会无法使用的问题
+
+```sh
+# wsl arch
+
+# 创建文件
+touch /etc/tmpfiles.d/wslg.conf
+
+# 编辑文件
+# 写入 L+ /tmp/.X11-unix - - - - /mnt/wslg/.X11-unix
+# ctrl + s 保存, ctrl + x 退出
+nano /etc/tmpfiles.d/wslg.conf
+```
+
 [可选] 创建常用用户以避免直接使用root用户
 
 ```sh
@@ -96,7 +110,7 @@ passwd <用户名>
 .\Arch.exe config --default-user <用户名>
 ```
 
-[可选] 初始化pacman密钥环 (取决于是否需要使用pacman)
+[可选] 安装pacman官方包管理工具 (取决于是否需要使用pacman)
 
 ```sh
 # wsl arch
@@ -111,25 +125,33 @@ sudo pacman-key --populate
 sudo pacman -Syy archlinux-keyring
 
 # 设置arch linux阿里巴巴源
-# 编辑/etc/pacman.d/mirrorlist，注释掉里面的所有行, 然后在文件的最顶端添加
-# Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
+# 编辑/etc/pacman.d/mirrorlist，注释掉里面的所有行, 然后在文件的最顶端添加 Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
 # ctrl + s 保存, ctrl + x 退出
 sudo nano /etc/pacman.d/mirrorlist
 
 # 重新同步软件包仓库
-sudo pacman -Syyu
+sudo pacman -Syu
 ```
 
-解决图形化程序可能会无法使用的问题
+[可选] 安装yay第三方包管理工具 (取决于是否需要使用yay)
 
 ```sh
 # wsl arch
 
-# 创建文件 /etc/tmpfiles.d/wslg.conf
-> /etc/tmpfiles.d/wslg.conf
+# 安装git和base-devel
+sudo pacman -S --needed git base-devel
 
-# 写入内容
-echo "L+ /tmp/.X11-unix - - - - /mnt/wslg/.X11-unix" >> /etc/tmpfiles.d/wslg.conf
+# 克隆yay git仓库
+git clone https://aur.archlinux.org/yay.git
+
+# 跳转到yay仓库
+cd yay
+
+# 构建安装 (不加sudo)
+makepkg -si
+
+# 重新同步软件包仓库 (不加sudo)
+yay -Syu
 ```
 
 `arch.exe`常用命令
