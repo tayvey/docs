@@ -10,7 +10,7 @@
             "options": {
                 "cwd": "${workspaceFolder}/src/webtest"
             },
-            "command": "rm -rf ./bin/Release/*",
+            "command": "mkdir -p ./bin/Release && rm -rf ./bin/Release/*",
             // "command": "Remove-Item -Path .\\bin\\Release\\* -Recurse -Force",
             "problemMatcher": "$msCompile"
         },
@@ -21,8 +21,8 @@
             "options": {
                 "cwd": "${workspaceFolder}/src/webtest"
             },
-            "command": "rm -rf ./bin/publish/*",
-            // "command": "Remove-Item -Path .\\bin\\publish\\* -Recurse -Force",
+            "command": "mkdir -p ./bin/Publish && rm -rf ./bin/Publish/*",
+            // "command": "Remove-Item -Path .\\bin\\Publish\\* -Recurse -Force",
             "problemMatcher": "$msCompile"
         },
         {
@@ -47,7 +47,7 @@
                 "-r",
                 "linux-x64",
                 "-o",
-                "bin/publish"
+                "bin/Publish"
             ],
             "problemMatcher": "$msCompile"
         }
