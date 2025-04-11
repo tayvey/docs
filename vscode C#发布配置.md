@@ -139,7 +139,6 @@
         },
         {
             "id": "projectFramework",
-            "type": "promptString",
             "type": "pickString",
             "description": "框架版本",
             "options": [
