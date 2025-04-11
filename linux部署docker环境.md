@@ -4,13 +4,13 @@
 
 ```sh
 # 下载二进制包
-wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-27.5.0.tgz
+wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-28.0.4.tgz
 
 # 解压
-tar xvf /usr/local/bin/docker-27.5.0.tgz --strip-components=1 -C /usr/local/bin/
+tar xvf /usr/local/bin/docker-28.0.4.tgz --strip-components=1 -C /usr/local/bin/
 
 # 删除
-rm -rf /usr/local/bin/docker-27.5.0.tgz
+rm -rf /usr/local/bin/docker-28.0.4.tgz
 
 # 创建docker配置文件目录
 mkdir -p /etc/docker
@@ -22,6 +22,14 @@ mkdir -p /etc/docker
 > /etc/systemd/system/dockerd.service
 
 # 创建docker运行目录
+mkdir -p /data/docker
+
+# 整合
+tar xvf /usr/local/bin/docker-28.0.4.tgz --strip-components=1 -C /usr/local/bin/ && \
+rm -rf /usr/local/bin/docker-28.0.4.tgz && \
+mkdir -p /etc/docker && \
+> /etc/docker/daemon.json && \
+> /etc/systemd/system/dockerd.service && \
 mkdir -p /data/docker
 ```
 
@@ -214,7 +222,22 @@ docker run -d \
 -e TZ=Asia/Shanghai \
 -v /data/redis/data:/data \
 -v /data/redis/conf.d:/usr/local/etc/redis \
-redis:7.4.1 \
+redis:7.4.2 \
+redis-server /usr/local/etc/redis/redis.conf
+
+# 整合
+mkdir -p /data/redis/conf.d && \
+> /data/redis/conf.d/redis.conf && \
+echo requirepass 123123 >> /data/redis/conf.d/redis.conf && \
+mkdir -p /data/redis/data && \
+docker run -d \
+--name=redis \
+-p 6379:6379 \
+--restart=always \
+-e TZ=Asia/Shanghai \
+-v /data/redis/data:/data \
+-v /data/redis/conf.d:/usr/local/etc/redis \
+redis:7.4.2 \
 redis-server /usr/local/etc/redis/redis.conf
 ```
 
@@ -243,6 +266,22 @@ mongo:8.0.3 \
 --keyFile /data/db/mongo-rs.key
 
 # 进入容器
+docker exec -it mongo bash
+
+# 整合
+mkdir -p /data/mongo/data && \
+openssl rand -base64 756 > /data/mongo/data/mongo-rs.key && \
+chmod 400 /data/mongo/data/mongo-rs.key && \
+docker run -d \
+--name=mongo \
+-p 27017:27017 \
+--restart=always \
+-e TZ=Asia/Shanghai \
+-v /data/mongo/data:/data/db \
+mongo:8.0.3 \
+--auth \
+--replSet rs \
+--keyFile /data/db/mongo-rs.key && \
 docker exec -it mongo bash
 
 # 连接mongodb
@@ -300,6 +339,28 @@ docker run -d \
 -v /data/nginx/conf.d:/etc/nginx/conf.d \
 -v /data/nginx/log:/var/log/nginx \
 nginx:1.27.2
+
+# 整合
+docker run -d --rm --name=nginx nginx:1.27.4 && \
+mkdir -p /data/nginx && \
+docker cp nginx:/usr/share/nginx/html /data/nginx/ && \
+docker cp nginx:/etc/nginx/nginx.conf /data/nginx/ && \
+docker cp nginx:/etc/nginx/conf.d /data/nginx/ && \
+mkdir -p /data/nginx/log && \
+> /data/nginx/log/access.log && \
+> /data/nginx/log/error.log && \
+docker stop nginx && \
+docker run -d \
+--name=nginx \
+-p 80:80 \
+-p 443:443 \
+--restart=always \
+-e TZ=Asia/Shanghai \
+-v /data/nginx/html:/usr/share/nginx/html \
+-v /data/nginx/nginx.conf:/etc/nginx/nginx.conf \
+-v /data/nginx/conf.d:/etc/nginx/conf.d \
+-v /data/nginx/log:/var/log/nginx \
+nginx:1.27.4
 ```
 
 ## OceanBase
