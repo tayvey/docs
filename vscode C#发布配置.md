@@ -114,7 +114,7 @@
             "description": "解决方案名称"
         },
         {
-            "id": "optionId",
+            "id": "projectType",
             "type": "pickString",
             "description": "项目类型",
             "options": [
