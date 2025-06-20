@@ -211,101 +211,105 @@ postgres:17.0
 
 ## Redis
 
+### 创建配置文件和持久化数据文件挂载
+
 ```sh
-# 创建配置文件挂载目录
-mkdir -p /data/redis/conf.d
+mkdir -p /root/app/redis/data && touch /root/app/redis/redis.conf
+```
 
-# 创建配置文件
-> /data/redis/conf.d/redis.conf
+### 创建容器
 
-# 设置密码
-echo requirepass 123123 >> /data/redis/conf.d/redis.conf
-
-# 创建持久化数据存储挂载目录
-mkdir -p /data/redis/data
-
-# 创建容器
+```sh
 docker run -d \
 --name=redis \
--p 6379:6379 \
+--network=host \
 --restart=always \
 -e TZ=Asia/Shanghai \
--v /data/redis/data:/data \
--v /data/redis/conf.d:/usr/local/etc/redis \
-redis:7.4.2 \
+-v /root/app/redis/data:/data \
+-v /root/app/redis/redis.conf:/usr/local/etc/redis/redis.conf \
+redis \
 redis-server /usr/local/etc/redis/redis.conf
+```
 
-# 整合
-mkdir -p /data/redis/conf.d && \
-> /data/redis/conf.d/redis.conf && \
-echo requirepass 123123 >> /data/redis/conf.d/redis.conf && \
-mkdir -p /data/redis/data && \
-docker run -d \
---name=redis \
--p 6379:6379 \
---restart=always \
--e TZ=Asia/Shanghai \
--v /data/redis/data:/data \
--v /data/redis/conf.d:/usr/local/etc/redis \
-redis:7.4.2 \
-redis-server /usr/local/etc/redis/redis.conf
+### 初始化
+
+#### 进入容器
+
+```sh
+docker exec -it redis bash
+```
+
+#### 连接Redis实例
+
+```sh
+redis-cli
+```
+
+### 创建用户
+
+```sh
+ACL SETUSER root on >123123 +@all ~*
 ```
 
 ## MongoDB
 
+### 创建数据挂载目录
+
 ```sh
-# 创建数据挂载目录
-mkdir -p /data/mongo/data
+mkdir -p /root/app/mongo/data
+```
 
-# 创建副本集KEY文件
-openssl rand -base64 756 > /data/mongo/data/mongo-rs.key
+### 创建副本集KEY文件
 
-# 副本集KEY文件授权
-chmod 400 /data/mongo/data/mongo-rs.key
+```sh
+openssl rand -base64 756 > /root/app/mongo/data/mongo-rs.key && chmod 400 /root/app/mongo/data/mongo-rs.key
+```
 
-# 创建容器
+### 创建docker容器
+
+```sh
 docker run -d \
 --name=mongo \
--p 27017:27017 \
+--network=host \
 --restart=always \
 -e TZ=Asia/Shanghai \
--v /data/mongo/data:/data/db \
-mongo:8.0.3 \
+-v /root/app/mongo/data:/data/db \
+mongo \
 --auth \
 --replSet rs \
---keyFile /data/db/mongo-rs.key
+--keyFile /data/db/mongo-rs.key \
+--port 27017
+```
 
-# 进入容器
+### 初始化
+
+#### 进入容器
+
+```sh
 docker exec -it mongo bash
+```
 
-# 整合
-mkdir -p /data/mongo/data && \
-openssl rand -base64 756 > /data/mongo/data/mongo-rs.key && \
-chmod 400 /data/mongo/data/mongo-rs.key && \
-docker run -d \
---name=mongo \
--p 27017:27017 \
---restart=always \
--e TZ=Asia/Shanghai \
--v /data/mongo/data:/data/db \
-mongo:8.0.3 \
---auth \
---replSet rs \
---keyFile /data/db/mongo-rs.key && \
-docker exec -it mongo bash
+#### 连接数据库实例
 
-# 连接mongodb
+```sh
 mongosh
 ```
 
-```js
-// 跳转数据库
+#### 切换数据库
+
+```sh
 use admin
+```
 
-// 初始化副本集
-rs.initiate({_id:"rs", members:[{_id:0, host:"127.0.0.1:27017"}]})
+#### 初始化副本集
 
-// 初始化默认用户
+```sh
+rs.initiate({_id:"rs", members:[{_id:0, host:"127.0.0.1:27017", priority:2}]})
+```
+
+#### 创建用户
+
+```sh
 db.createUser({ user:"root",pwd:"123123",roles:[{role:"root",db:"admin"}]})
 ```
 
