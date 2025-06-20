@@ -2,46 +2,56 @@
 
 ## Docker
 
+### 下载二进制包
+
 ```sh
-# 下载二进制包
-wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-28.0.4.tgz
+wget -p /usr/local/bin https://download.docker.com/linux/static/stable/x86_64/docker-xx.x.x.tgz
+```
 
-# 解压
-tar xvf /usr/local/bin/docker-28.0.4.tgz --strip-components=1 -C /usr/local/bin/
+<span style="color:red">注意替换xx.x.x为实际使用版本号</span>
 
-# 删除
-rm -rf /usr/local/bin/docker-28.0.4.tgz
+### 解压并删除压缩包
 
-# 创建docker配置文件目录
-mkdir -p /etc/docker
+```sh
+tar xvf /usr/local/bin/docker-xx.x.x.tgz --strip-components=1 -C /usr/local/bin/ && rm -rf /usr/local/bin/docker-xx.x.x.tgz
+```
 
-# 创建docker配置文件
-> /etc/docker/daemon.json
+<span style="color:red">注意替换xx.x.x为实际使用版本号</span>
 
-# 创建systemd配置文件
-> /etc/systemd/system/dockerd.service
+### 创建docker配置文件
 
-# 创建docker运行目录
-mkdir -p /data/docker
+```sh
+mkdir -p /etc/docker && touch /etc/docker/daemon.json
+```
 
-# 整合
-tar xvf /usr/local/bin/docker-28.0.4.tgz --strip-components=1 -C /usr/local/bin/ && \
-rm -rf /usr/local/bin/docker-28.0.4.tgz && \
-mkdir -p /etc/docker && \
-> /etc/docker/daemon.json && \
-> /etc/systemd/system/dockerd.service && \
+### 创建systemd配置文件
+
+```sh
+touch /etc/systemd/system/docker.service
+```
+
+### 创建docker运行目录 [可选]
+
+```sh
 mkdir -p /data/docker
 ```
 
+### docker配置
+
 ```json
-// daemon.json
 {
-    "iptables": false
+    "iptables": false,
+    "data-root": "/data/docker"
 }
 ```
 
+如果不需要修改docker默认运行目录, 可以省略`data-root`
+
+<span style="color:red">注意配置中不能有注释</span>
+
+### systemd配置
+
 ```ini
-# dockerd.service
 [Unit]
 
 [Service]
@@ -49,7 +59,7 @@ Type=notify
 # Environment="HTTP_PROXY=http://your.proxy.server:port"
 # Environment="HTTPS_PROXY=https://your.proxy.server:port"
 # Environment="NO_PROXY=localhost,127.0.0.1,::1,192.168.1.0/24"
-ExecStart=/usr/local/bin/dockerd --data-root /data/docker
+ExecStart=/usr/local/bin/dockerd
 
 [Install]
 WantedBy=multi-user.target
