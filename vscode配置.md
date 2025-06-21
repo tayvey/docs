@@ -1,6 +1,10 @@
-# vscode C# 任务配置
+# vscode配置
 
-## linux环境
+## 任务配置
+
+### C#任务配置
+
+#### Linux
 
 ```json
 {
@@ -144,7 +148,7 @@
 }
 ```
 
-## windows环境
+#### Windows
 
 ```json
 {
@@ -285,5 +289,15 @@
             ]
         }
     ]
+}
+```
+
+### 工作区设置
+
+```json
+{
+    "files.associations": {
+        "appsettings*.json": "jsonc"
+    }
 }
 ```
