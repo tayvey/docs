@@ -80,7 +80,7 @@ docker run -d \
 -p 3306:3306 \
 --restart=always \
 -e TZ=Asia/Shanghai \
--e MYSQL_ROOT_PASSWORD=123123 \
+-e MYSQL_ROOT_PASSWORD=your_password \
 -v /data/mysql/conf.d:/etc/mysql/conf.d \
 -v /data/mysql/data:/var/lib/mysql \
 mysql:9.1.0
@@ -102,7 +102,7 @@ docker run -d \
 --restart=always \
 -e TZ=Asia/Shanghai \
 -e ACCEPT_EULA=Y \
--e MSSQL_SA_PASSWORD=A123123a \
+-e MSSQL_SA_PASSWORD=your_password \
 -v /data/mssql/data:/var/opt/mssql \
 mcr.microsoft.com/mssql/server:2022-CU15-GDR1-ubuntu-22.04
 ```
@@ -144,7 +144,7 @@ docker run -d \
 -e TZ=Asia/Shanghai \
 -e ORACLE_SID=ORCLS \
 -e ORACLE_PDB=ORCLP \
--e ORACLE_PWD=123123 \
+-e ORACLE_PWD=your_password \
 -v /data/oracle/data:/opt/oracle/oradata \
 twyyy/oracle:21c
 ```
@@ -204,17 +204,23 @@ docker run -d \
 -p 5432:5432 \
 --restart=always \
 -e TZ=Asia/Shanghai \
--e POSTGRES_PASSWORD=123123 \
+-e POSTGRES_PASSWORD=your_password \
 -v /data/pgsql/data:/var/lib/postgresql/data \
 postgres:17.0
 ```
 
 ## Redis
 
-### 创建配置文件和持久化数据文件挂载
+### 创建持久化数据目录
 
 ```sh
-mkdir -p /root/app/redis/data && touch /root/app/redis/redis.conf
+mkdir -p /root/app/redis/data
+```
+
+### 创建配置文件
+
+```sh
+touch /root/app/redis/redis.conf && echo "requirepass your_password" > /root/app/redis/redis.conf
 ```
 
 ### 创建容器
@@ -229,26 +235,6 @@ docker run -d \
 -v /root/app/redis/redis.conf:/usr/local/etc/redis/redis.conf \
 redis \
 redis-server /usr/local/etc/redis/redis.conf
-```
-
-### 初始化
-
-#### 进入容器
-
-```sh
-docker exec -it redis bash
-```
-
-#### 连接Redis实例
-
-```sh
-redis-cli
-```
-
-### 创建用户
-
-```sh
-ACL SETUSER root on >123123 +@all ~*
 ```
 
 ## MongoDB
@@ -310,7 +296,7 @@ rs.initiate({_id:"rs", members:[{_id:0, host:"127.0.0.1:27017", priority:2}]})
 #### 创建用户
 
 ```sh
-db.createUser({ user:"root",pwd:"123123",roles:[{role:"root",db:"admin"}]})
+db.createUser({ user:"your_username",pwd:"your_password",roles:[{role:"root",db:"admin"}]})
 ```
 
 ## Nginx
