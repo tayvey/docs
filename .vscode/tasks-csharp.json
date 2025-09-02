@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Debug",
+      "type": "process",
+      "options": {
+        "cwd": "${workspaceFolder}/Project"
+      },
+      "command": "dotnet",
+      "args": [
+        "build",
+        "-p:GenerateFullPaths=true",
+        "-clp:NoSummary",
+        "-p:Platform=AnyCPU"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Clean Publish Directory",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/Project"
+      },
+      // linux
+      // "command": "mkdir -p ./bin/Publish && rm -rf ./bin/Publish/*",
+      // windows
+      "command": "md ./bin/Publish -f;rm -r -fo ./bin/Publish/*",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Publish",
+      "dependsOn": "Clean Publish Directory",
+      "type": "process",
+      "options": {
+        "cwd": "${workspaceFolder}/Project"
+      },
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "-p:GenerateFullPaths=true",
+        "-clp:NoSummary",
+        "-p:Platform=AnyCPU",
+        "-p:SelfContained=true",
+        "-p:PublishSingleFile=false",
+        "-c",
+        "Release",
+        "-f",
+        "net8.0",
+        "-r",
+        "win-x64",
+        "-o",
+        "bin/Publish"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

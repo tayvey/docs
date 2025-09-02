@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "appsettings*.json": "jsonc",
+      "tasks*.json": "jsonc"
+    }
+  }
+}
